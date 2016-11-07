@@ -1,0 +1,20 @@
+1.)select distinct Title,ImdbRating from filmInfo,rating where filmInfo.ImdbId=rating.ImdbId and rating.ImdbRating and rating.ImdbRating>6.0 order by ImdbRating desc;
+
+2.)select distinct person.Name from filmInfo,roles,person,rolesMap where rolesMap.Name="Actor" and rolesMap.RoleId=roles.role and filmInfo.Title="The Hateful Eight" and filmInfo.ImdbId=roles.ImdbId and roles.PersonId=person.PersonId order by person.Name;
+
+3.)select distinct Title from filmInfo UNION ALL select distinct person.Name from roles,rolesMap,person where (rolesMap.Name="Actor" or rolesMap.Name="Director") and rolesMap.RoleId=roles.Role and roles.PersonId=person.PersonID order by Title INTO OUTFILE '/var/lib/mysql-files/3.txt' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+Q4) select distinct f.Title from filmInfo f,roles r, rolesMap m 
+where f.ImdbId=r.ImdbId and r.role=m.RoleId and m.Name="Writer" and r.PersonId 
+IN (select r.PersonId from filmInfo f,roles r, rolesMap m where f.ImdbId=r.ImdbId and r.role=m.RoleId and m.Name="Director") 
+order by f.Title 
+INTO OUTFILE '/var/lib/mysql-files/4.txt' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' ;
+
+
+Q5) select f.Title, r.ImdbRating from filmInfo f,rating r 
+where r.ImdbId=f.ImdbId and f.Country Like "%India%" order by r.ImdbRating desc 
+INTO OUTFILE '/var/lib/mysql-files/5.txt' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+Q6) select ImdbRating from rating Group by ImdbRating asc 
+INTO OUTFILE '/var/lib/mysql-files/6.txt' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
